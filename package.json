@@ -1,0 +1,48 @@
+{
+  "name": "terramarkets",
+  "version": "1.0.0",
+  "description": "TerraMarkets TypeScript library",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --ext .js,.ts .",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "prepare": "rimraf dist && npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://terramarkets@github.com/terramarkets/terramarkets.js.git"
+  },
+  "keywords": [
+    "blockchain",
+    "terra",
+    "terramarkets"
+  ],
+  "author": "TerraMarkets",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/terramarkets/terramarkets.js/issues"
+  },
+  "homepage": "https://github.com/terramarkets/terramarkets.js#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "@microsoft/signalr": "^6.0.1",
+    "@terra-money/terra.js": "^3.0.6"
+  },
+  "files": [
+    "dist/**/*"
+  ]
+}
