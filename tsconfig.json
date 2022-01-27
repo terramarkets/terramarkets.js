@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
-		"esModuleInterop": true,
+    "esModuleInterop": true,
     "rootDir": "src",
     "strict": true,
     "target": "es2017",
