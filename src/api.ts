@@ -13,10 +13,17 @@ export interface MarketUpdate {
   update_date: Date;
 }
 
+export interface MarketInfo {
+  marketName: string;
+  contractAddress: string;
+}
+
+export type NetworkType = 'mainnet' | 'testnet' | 'localterra';
+
 export class TerraMarketsApi {
   private axios: AxiosInstance;
 
-  constructor(public url: string, apiKey?: string) {
+  constructor(public url: string = 'https://terramarketfunctions.azurewebsites.net/api/', apiKey?: string) {
     this.axios = axios.create({
       baseURL: url,
       headers: {
@@ -34,6 +41,10 @@ export class TerraMarketsApi {
       .withUrl(this.axios.defaults.baseURL as string)
       .withAutomaticReconnect()
       .build();
+  }
+
+  public async getMarketsList(network: NetworkType): Promise<Array<MarketInfo>> {
+    return await this.axiosget(`marketslist/?network=${network}`);
   }
 
   public async getRoundById(market: string, open_height: number): Promise<Array<RoundResponse>> {
