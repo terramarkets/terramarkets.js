@@ -25,7 +25,11 @@ export class TerraMarketsApi {
   private axios: AxiosInstance;
   private readonly userId: string;
 
-  constructor(public network: NetworkType, public url: string = 'https://terramarketfunctions.azurewebsites.net/api/', apiKey?: string) {
+  constructor(
+    public network: NetworkType,
+    public url: string = 'https://terramarketfunctions.azurewebsites.net/api/',
+    apiKey?: string
+  ) {
     this.axios = axios.create({
       baseURL: url,
       headers: {
@@ -37,7 +41,7 @@ export class TerraMarketsApi {
       this.axios.defaults.headers.common['x-functions-key'] = apiKey;
     }
     this.userId = TerraMarketsApi.generateUserId();
-    this.axios.defaults.headers.common["X-UserId"] = this.userId;
+    this.axios.defaults.headers.common['X-UserId'] = this.userId;
     this.hubConnection = this.getHubConnection();
   }
 
@@ -101,8 +105,9 @@ export class TerraMarketsApi {
   private getHubConnection(): HubConnection {
     return new HubConnectionBuilder()
       .withUrl(this.axios.defaults.baseURL as string, {
-        headers: { "X-UserId": this.userId }
-      }).withAutomaticReconnect()
+        headers: { 'X-UserId': this.userId }
+      })
+      .withAutomaticReconnect()
       .build();
   }
 
