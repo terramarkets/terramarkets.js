@@ -47,11 +47,12 @@ export interface BetStatsResponse {
 
 export interface ConfigResponse {
   denom: string;
+  description: string;
   interval: number;
-  market: string;
   min_bet: string;
   tax: string;
   owner: string;
+  symbol: string;
   treasury: string;
 }
 
