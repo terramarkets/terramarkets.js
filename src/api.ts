@@ -4,7 +4,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { HubConnection } from '@microsoft/signalr/dist/esm/HubConnection';
 
 export interface MarketUpdate {
-  market: string;
+  symbol: string;
   last_price: string | undefined;
   open_round: RoundResponse;
   locked_round: RoundResponse;
@@ -13,17 +13,19 @@ export interface MarketUpdate {
   update_date: Date;
 }
 
-export interface MarketInfo {
-  marketName: string;
+export interface SymbolInfo {
+  symbol: string;
   contractAddress: string;
 }
 
 export type NetworkType = 'mainnet' | 'testnet' | 'localterra';
 
 export class TerraMarketsApi {
+  public readonly hubConnection: HubConnection;
   private axios: AxiosInstance;
+  private readonly userId: string;
 
-  constructor(public url: string = 'https://terramarketfunctions.azurewebsites.net/api/', apiKey?: string) {
+  constructor(public network: NetworkType, public url: string = 'https://terramarketfunctions.azurewebsites.net/api/', apiKey?: string) {
     this.axios = axios.create({
       baseURL: url,
       headers: {
@@ -34,33 +36,50 @@ export class TerraMarketsApi {
     if (apiKey !== undefined) {
       this.axios.defaults.headers.common['x-functions-key'] = apiKey;
     }
+    this.userId = TerraMarketsApi.generateUserId();
+    this.axios.defaults.headers.common["X-UserId"] = this.userId;
+    this.hubConnection = this.getHubConnection();
   }
 
-  public getMarketHubConnection(): HubConnection {
-    return new HubConnectionBuilder()
-      .withUrl(this.axios.defaults.baseURL as string)
-      .withAutomaticReconnect()
-      .build();
+  public async subscribe(symbol: string): Promise<HubConnection> {
+    await this.startHubConnection();
+    await this.axiosget(`${this.network}/subscribe/${symbol}`);
+    return this.hubConnection;
   }
 
-  public async getMarketsList(network: NetworkType): Promise<Array<MarketInfo>> {
-    return await this.axiosget(`marketslist/?network=${network}`);
+  public async unSubscribe(symbol: string): Promise<void> {
+    await this.axiosget(`${this.network}/unsubscribe/${symbol}`);
   }
 
-  public async getRoundById(market: string, open_height: number): Promise<Array<RoundResponse>> {
-    return await this.axiosget(`rounds/${market}/${open_height}`);
+  public async startHubConnection(): Promise<HubConnection> {
+    if (this.hubConnection.connectionId === null) {
+      await this.hubConnection.start();
+    }
+    return this.hubConnection;
   }
 
-  public async getLastRounds(market: string, count: number): Promise<Array<RoundResponse>> {
-    return await this.axiosget(`rounds/${market}/?count=${count}`);
+  public async closeHubConnection(): Promise<void> {
+    return await this.hubConnection.stop();
   }
 
-  public async getMarketState(market: string): Promise<Array<MarketUpdate>> {
-    return await this.axiosget(`market/${market}`);
+  public async getSymbols(): Promise<Array<SymbolInfo>> {
+    return await this.axiosget(`${this.network}/symbols`);
+  }
+
+  public async getRoundById(symbol: string, open_height: number): Promise<Array<RoundResponse>> {
+    return await this.axiosget(`${this.network}/rounds/${symbol}/${open_height}`);
+  }
+
+  public async getLastRounds(symbol: string, count: number): Promise<Array<RoundResponse>> {
+    return await this.axiosget(`${this.network}/rounds/${symbol}/?count=${count}`);
+  }
+
+  public async getMarketState(symbol: string): Promise<Array<MarketUpdate>> {
+    return await this.axiosget(`${this.network}/market/${symbol}`);
   }
 
   public async updateMarket(
-    market: string,
+    symbol: string,
     last_price: string | undefined,
     open_round: RoundResponse | undefined,
     locked_round: RoundResponse | undefined,
@@ -68,8 +87,8 @@ export class TerraMarketsApi {
     status: MarketStatus | undefined,
     update_date: Date
   ): Promise<unknown> {
-    return await this.axiosput(`market`, {
-      market,
+    return await this.axiosput(`${this.network}/market`, {
+      symbol,
       last_price,
       open_round,
       locked_round,
@@ -77,6 +96,14 @@ export class TerraMarketsApi {
       status,
       update_date
     });
+  }
+
+  private getHubConnection(): HubConnection {
+    return new HubConnectionBuilder()
+      .withUrl(this.axios.defaults.baseURL as string, {
+        headers: { "X-UserId": this.userId }
+      }).withAutomaticReconnect()
+      .build();
   }
 
   private async axiosget<T>(endpoint: string, config: AxiosRequestConfig = {}): Promise<T> {
@@ -89,5 +116,9 @@ export class TerraMarketsApi {
     return this.axios.put(endpoint, data, config).then(r => {
       return r.data;
     });
+  }
+
+  private static generateUserId(): string {
+    return Math.random().toString(36).substring(2, 10);
   }
 }
