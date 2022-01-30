@@ -45,6 +45,10 @@ export class TerraMarketsApi {
     this.hubConnection = this.getHubConnection();
   }
 
+  private static generateUserId(): string {
+    return Math.random().toString(36).substring(2, 10);
+  }
+
   public async subscribe(symbol: string): Promise<HubConnection> {
     await this.startHubConnection();
     await this.axiosget(`${this.network}/subscribe/${symbol}`);
@@ -64,6 +68,15 @@ export class TerraMarketsApi {
 
   public async closeHubConnection(): Promise<void> {
     return await this.hubConnection.stop();
+  }
+
+  public async getContractAddressForSymbol(symbol: string): Promise<string | undefined> {
+    const symbols = await this.getSymbols();
+    const s = symbols.find(x => x.symbol === symbol);
+    if (s !== undefined) {
+      return s.contractAddress;
+    }
+    return undefined;
   }
 
   public async getSymbols(): Promise<Array<SymbolInfo>> {
@@ -117,13 +130,10 @@ export class TerraMarketsApi {
     });
   }
 
+  // eslint-disable-next-line
   private async axiosput<T>(endpoint: string, data: any, config: AxiosRequestConfig = {}): Promise<T> {
     return this.axios.put(endpoint, data, config).then(r => {
       return r.data;
     });
-  }
-
-  private static generateUserId(): string {
-    return Math.random().toString(36).substring(2, 10);
   }
 }
