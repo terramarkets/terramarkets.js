@@ -2,7 +2,7 @@
 
 ## Usage
 
-#### Initialize api, receive information about available symbols and subscription to real-time market events
+#### Initialize api, receive information about available symbols and subscribe to real-time market events
 
 ```ts
 import { TerraMarketsApi } from 'terramarkets.js';
@@ -18,10 +18,10 @@ const hubConnection = await api.startHubConnection();
 
 // Set market updates callback 
 hubConnection.on("onMarketUpdate", (marketUpdate: MarketUpdate) => {
-  // Handle market update - do something
+  // Handle market update - do something ...
 });
 
-// Handle connection lost and recconect  
+// Handle connection lost and reconnect  
 hubConnection.onreconnecting(async () => {
   // Resubscribe to symbol  
   await api.subscribe(symbolsInfo[0].symbol);
@@ -33,10 +33,11 @@ await api.subscribe(symbolsInfo[0].symbol);
 // Get current market state
 await api.getMarketState(symbolsInfo[0].symbol);
 
-// on app end call: await api.closeHubConnection() to close connection 
+// Close connection on app end
+await api.closeHubConnection(); 
 ```  
 
-#### Interacting with smart contract 
+#### Interacting with TerraMarkets smart contract 
 
 ```ts
 import { LCDClient, MnemonicKey, Wallet } from '@terra-money/terra.js';
