@@ -83,7 +83,7 @@ export class TerraMarketsApi {
     return await this.axiosget(`${this.network}/symbols`);
   }
 
-  public async getRoundById(symbol: string, open_height: number): Promise<Array<RoundResponse>> {
+  public async getRoundById(symbol: string, open_height: number): Promise<RoundResponse> {
     return await this.axiosget(`${this.network}/rounds/${symbol}/${open_height}`);
   }
 
@@ -91,7 +91,7 @@ export class TerraMarketsApi {
     return await this.axiosget(`${this.network}/rounds/${symbol}/?count=${count}`);
   }
 
-  public async getMarketState(symbol: string): Promise<Array<MarketUpdate>> {
+  public async getMarketState(symbol: string): Promise<MarketUpdate> {
     return await this.axiosget(`${this.network}/market/${symbol}`);
   }
 

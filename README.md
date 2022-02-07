@@ -22,7 +22,7 @@ hubConnection.on("onMarketUpdate", (marketUpdate: MarketUpdate) => {
 });
 
 // Handle connection lost and reconnect  
-hubConnection.onreconnecting(async () => {
+hubConnection.onreconnected(async () => {
   // Resubscribe to symbol  
   await api.subscribe(symbolsInfo[0].symbol);
 });
@@ -31,7 +31,7 @@ hubConnection.onreconnecting(async () => {
 await api.subscribe(symbolsInfo[0].symbol);
 
 // Get current market state
-await api.getMarketState(symbolsInfo[0].symbol);
+const marketState = await api.getMarketState(symbolsInfo[0].symbol);
 
 // Close connection on app end
 await api.closeHubConnection(); 

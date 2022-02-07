@@ -8,7 +8,7 @@
     "dist/**/*"
   ],
   "scripts": {
-    "test": "jest --config jestconfig.json",
+    "test": "jest",
     "build": "tsc",
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
@@ -49,5 +49,13 @@
   "dependencies": {
     "@microsoft/signalr": "^6.0.1",
     "@terra-money/terra.js": "^3.0.6"
+  },
+  "jest" : {
+    "transform": {
+      "^.+\\.(t|j)sx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "testTimeout": 25000
   }
 }

@@ -15,6 +15,13 @@ test('ApiGetSymbols', async () => {
   expect(symbols.find(x => x.symbol == testSymbol)).toBeDefined();
 });
 
+test('ApiGetMarketState', async () => {
+  const api = new TerraMarketsApi('localterra');
+  const marketState = await api.getMarketState(testSymbol);
+  expect(marketState).toBeDefined();
+  expect(marketState.status).toBeDefined();
+});
+
 test('ApiHubSubscription', async () => {
   const api = new TerraMarketsApi('localterra', process.env.ApiURL, process.env.ApiKey);
   const connection = await api.startHubConnection();
