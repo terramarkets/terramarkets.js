@@ -1,6 +1,6 @@
 {
   "name": "terramarkets.js",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "TerraMarkets TypeScript library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -50,12 +50,19 @@
     "@microsoft/signalr": "^6.0.1",
     "@terra-money/terra.js": "^3.0.6"
   },
-  "jest" : {
+  "jest": {
     "transform": {
       "^.+\\.(t|j)sx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "testTimeout": 25000
   }
 }
