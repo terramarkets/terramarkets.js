@@ -1,4 +1,4 @@
-import { MsgExecuteContract, Wallet } from '@terra-money/terra.js';
+import { LCDClient, MsgExecuteContract } from '@terra-money/terra.js';
 import { AccAddress } from '@terra-money/terra.js/dist/core/bech32';
 
 export enum BetDirection {
@@ -162,20 +162,20 @@ export class TerraMarketsContract {
     return { round: { round_id } };
   }
 
-  executeCloseMarket(wallet: Wallet): MsgExecuteContract {
-    return new MsgExecuteContract(wallet.key.accAddress, this.contractAddress, this.fabricateCloseMarket());
+  executeCloseMarket(accAddress: string): MsgExecuteContract {
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateCloseMarket());
   }
 
-  executeOpenMarket(wallet: Wallet): MsgExecuteContract {
-    return new MsgExecuteContract(wallet.key.accAddress, this.contractAddress, this.fabricateOpenMarket());
+  executeOpenMarket(accAddress: string): MsgExecuteContract {
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateOpenMarket());
   }
 
-  executePauseMarket(wallet: Wallet): MsgExecuteContract {
-    return new MsgExecuteContract(wallet.key.accAddress, this.contractAddress, this.fabricatePauseMarket());
+  executePauseMarket(accAddress: string): MsgExecuteContract {
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricatePauseMarket());
   }
 
   executeNextRound(
-    wallet: Wallet,
+    accAddress: string,
     lock_height: number,
     lock_time: number,
     lock_price: string,
@@ -185,70 +185,70 @@ export class TerraMarketsContract {
     open_new: boolean
   ): MsgExecuteContract {
     return new MsgExecuteContract(
-      wallet.key.accAddress,
+      accAddress,
       this.contractAddress,
       this.fabricateNextRound(lock_height, lock_time, lock_price, close_height, close_time, close_price, open_new)
     );
   }
 
-  executeCancelRound(wallet: Wallet, round_id: number): MsgExecuteContract {
-    return new MsgExecuteContract(wallet.key.accAddress, this.contractAddress, this.fabricateCancelRound(round_id));
+  executeCancelRound(accAddress: string, round_id: number): MsgExecuteContract {
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateCancelRound(round_id));
   }
 
   executeUpdateConfig(
-    wallet: Wallet,
+    accAddress: string,
     owner: string | undefined,
     tax: string | undefined,
     min_bet: string | undefined
   ): MsgExecuteContract {
     return new MsgExecuteContract(
-      wallet.key.accAddress,
+      accAddress,
       this.contractAddress,
       this.fabricateUpdateConfig(owner, tax, min_bet)
     );
   }
 
-  executeBet(wallet: Wallet, round_id: number, amount: string, direction: BetDirection): MsgExecuteContract {
+  executeBet(accAddress: string, round_id: number, amount: string, direction: BetDirection): MsgExecuteContract {
     return new MsgExecuteContract(
-      wallet.key.accAddress,
+      accAddress,
       this.contractAddress,
       this.fabricateBet(round_id, amount, direction)
     );
   }
 
-  executeClaim(wallet: Wallet, rounds: number[]): MsgExecuteContract {
-    return new MsgExecuteContract(wallet.key.accAddress, this.contractAddress, this.fabricateClaim(rounds));
+  executeClaim(accAddress: string, rounds: number[]): MsgExecuteContract {
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateClaim(rounds));
   }
 
-  async queryBetInfo(wallet: Wallet, address: string, round_id: number): Promise<BetInfoResponse> {
-    return await wallet.lcd.wasm.contractQuery(this.contractAddress, this.fabricateQueryBetInfo(address, round_id));
+  async queryBetInfo(lcdClient: LCDClient, address: string, round_id: number): Promise<BetInfoResponse> {
+    return await lcdClient.wasm.contractQuery(this.contractAddress, this.fabricateQueryBetInfo(address, round_id));
   }
 
   async queryBetHistory(
-    wallet: Wallet,
+    lcdClient: LCDClient,
     address: string,
     round_before: number | undefined,
     limit: number | undefined
   ): Promise<BetHistoryResponse> {
-    return await wallet.lcd.wasm.contractQuery(
+    return await lcdClient.wasm.contractQuery(
       this.contractAddress,
       this.fabricateQueryBetHistory(address, round_before, limit)
     );
   }
 
-  async queryBetStats(wallet: Wallet, address: string): Promise<BetStatsResponse> {
-    return await wallet.lcd.wasm.contractQuery(this.contractAddress, this.fabricateQueryBetStats(address));
+  async queryBetStats(lcdClient: LCDClient, address: string): Promise<BetStatsResponse> {
+    return await lcdClient.wasm.contractQuery(this.contractAddress, this.fabricateQueryBetStats(address));
   }
 
-  async queryConfig(wallet: Wallet): Promise<ConfigResponse> {
-    return await wallet.lcd.wasm.contractQuery(this.contractAddress, this.fabricateQueryConfig());
+  async queryConfig(lcdClient: LCDClient): Promise<ConfigResponse> {
+    return await lcdClient.wasm.contractQuery(this.contractAddress, this.fabricateQueryConfig());
   }
 
-  async queryMarket(wallet: Wallet): Promise<MarketResponse> {
-    return await wallet.lcd.wasm.contractQuery(this.contractAddress, this.fabricateQueryMarket());
+  async queryMarket(lcdClient: LCDClient): Promise<MarketResponse> {
+    return await lcdClient.wasm.contractQuery(this.contractAddress, this.fabricateQueryMarket());
   }
 
-  async queryRound(wallet: Wallet, round_id: number): Promise<RoundResponse> {
-    return await wallet.lcd.wasm.contractQuery(this.contractAddress, this.fabricateQueryRound(round_id));
+  async queryRound(lcdClient: LCDClient, round_id: number): Promise<RoundResponse> {
+    return await lcdClient.wasm.contractQuery(this.contractAddress, this.fabricateQueryRound(round_id));
   }
 }
