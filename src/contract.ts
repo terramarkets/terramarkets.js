@@ -201,19 +201,11 @@ export class TerraMarketsContract {
     tax: string | undefined,
     min_bet: string | undefined
   ): MsgExecuteContract {
-    return new MsgExecuteContract(
-      accAddress,
-      this.contractAddress,
-      this.fabricateUpdateConfig(owner, tax, min_bet)
-    );
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateUpdateConfig(owner, tax, min_bet));
   }
 
   executeBet(accAddress: string, round_id: number, amount: string, direction: BetDirection): MsgExecuteContract {
-    return new MsgExecuteContract(
-      accAddress,
-      this.contractAddress,
-      this.fabricateBet(round_id, amount, direction)
-    );
+    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateBet(round_id, amount, direction));
   }
 
   executeClaim(accAddress: string, rounds: number[]): MsgExecuteContract {
