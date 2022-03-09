@@ -15,7 +15,7 @@ export interface MarketUpdate {
 
 export interface SymbolInfo {
   symbol: string;
-	contractAddress: string;
+  contractAddress: string;
   description: string;
 }
 
