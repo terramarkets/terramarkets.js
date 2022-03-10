@@ -1,6 +1,6 @@
 import { LCDClient, MsgExecuteContract } from '@terra-money/terra.js';
 import { AccAddress } from '@terra-money/terra.js/dist/core/bech32';
-import { Coins } from "@terra-money/terra.js/dist/core/Coins";
+import { Coins } from '@terra-money/terra.js/dist/core/Coins';
 
 export enum BetDirection {
   Up = 'up',
@@ -86,8 +86,7 @@ export interface RoundResponse {
 }
 
 export class TerraMarketsContract {
-  constructor(public contractAddress: AccAddress) {
-  }
+  constructor(public contractAddress: AccAddress) {}
 
   fabricateCloseMarket() {
     return { close_market: {} };
@@ -206,8 +205,19 @@ export class TerraMarketsContract {
     return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateUpdateConfig(owner, tax, min_bet));
   }
 
-  executeBet(accAddress: string, round_id: number, amount: string, direction: BetDirection, coins: Coins.Input): MsgExecuteContract {
-    return new MsgExecuteContract(accAddress, this.contractAddress, this.fabricateBet(round_id, amount, direction), coins);
+  executeBet(
+    accAddress: string,
+    round_id: number,
+    amount: string,
+    direction: BetDirection,
+    coins: Coins.Input
+  ): MsgExecuteContract {
+    return new MsgExecuteContract(
+      accAddress,
+      this.contractAddress,
+      this.fabricateBet(round_id, amount, direction),
+      coins
+    );
   }
 
   executeClaim(accAddress: string, rounds: number[]): MsgExecuteContract {
