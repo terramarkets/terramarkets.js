@@ -17,6 +17,7 @@ export interface SymbolInfo {
   symbol: string;
   contractAddress: string;
   description: string;
+  interval: number;
 }
 
 export type NetworkType = 'mainnet' | 'testnet' | 'localterra';
