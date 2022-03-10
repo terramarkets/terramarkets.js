@@ -47,6 +47,7 @@ export interface BetStatsResponse {
 }
 
 export interface ConfigResponse {
+  asset: string;
   denom: string;
   description: string;
   interval: number;
