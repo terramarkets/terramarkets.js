@@ -99,8 +99,7 @@ export interface RoundResponse {
 }
 
 export class TerraMarketsContract {
-  constructor(public contractAddress: AccAddress) {
-  }
+  constructor(public contractAddress: AccAddress) {}
 
   fabricateCloseMarket() {
     return { close_market: {} };
