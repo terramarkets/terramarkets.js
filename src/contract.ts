@@ -20,13 +20,25 @@ export enum RoundStatus {
   Canceled = 'canceled'
 }
 
+export interface BetCounters {
+  loss: number;
+  refund: number;
+  won: number;
+}
+
+export interface BetResults {
+  loss: string;
+  refund: string;
+  won: string;
+}
+
 export interface BetInfoResponse {
   address: string;
   amount: string;
-  amount_won: string;
   claimed: boolean;
   direction: BetDirection | undefined;
   is_claimable: boolean;
+  results: BetResults;
   round: RoundResponse | undefined;
 }
 
@@ -37,13 +49,13 @@ export interface BetHistoryResponse {
 export interface BetStatsResponse {
   amount_played: string;
   amount_to_claim: string;
-  amount_refunded: string;
-  amount_won: string;
+  counters: BetCounters;
+  results: BetResults;
   rounds_claimed: number[];
   rounds_played: number;
   rounds_to_claim: number[];
-  rounds_won: number;
-  rounds_refunded: number;
+  rounds_unfinished: number;
+  unfinished_amount: string;
 }
 
 export interface ConfigResponse {
@@ -87,7 +99,8 @@ export interface RoundResponse {
 }
 
 export class TerraMarketsContract {
-  constructor(public contractAddress: AccAddress) {}
+  constructor(public contractAddress: AccAddress) {
+  }
 
   fabricateCloseMarket() {
     return { close_market: {} };
