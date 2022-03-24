@@ -23,7 +23,7 @@ export enum RoundStatus {
 export enum BetsToReturn {
   All = 'all',
   ToClaim = 'to_claim',
-  Claimed = 'claimed',
+  Claimed = 'claimed'
 }
 
 export interface BetCounters {
@@ -105,8 +105,7 @@ export interface RoundResponse {
 }
 
 export class TerraMarketsContract {
-  constructor(public contractAddress: AccAddress) {
-  }
+  constructor(public contractAddress: AccAddress) {}
 
   fabricateCloseMarket() {
     return { close_market: {} };
@@ -163,7 +162,12 @@ export class TerraMarketsContract {
     return { bet_info: { address, round_id } };
   }
 
-  fabricateQueryBetHistory(address: string, bets_to_return: BetsToReturn | undefined,  round_before: number | undefined, limit: number | undefined) {
+  fabricateQueryBetHistory(
+    address: string,
+    bets_to_return: BetsToReturn | undefined,
+    round_before: number | undefined,
+    limit: number | undefined
+  ) {
     return { bet_history: { address, bets_to_return, round_before, limit } };
   }
 
