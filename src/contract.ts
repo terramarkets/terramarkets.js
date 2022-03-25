@@ -26,6 +26,11 @@ export enum BetsToReturn {
   Claimed = 'claimed'
 }
 
+export enum OrderBy {
+  Asc = "asc",
+  Desc = "desc",
+}
+
 export interface BetCounters {
   loss: number;
   refund: number;
@@ -104,8 +109,13 @@ export interface RoundResponse {
   status: RoundStatus;
 }
 
+export interface RoundHistoryResponse {
+  rounds: RoundResponse[];
+}
+
 export class TerraMarketsContract {
-  constructor(public contractAddress: AccAddress) {}
+  constructor(public contractAddress: AccAddress) {
+  }
 
   fabricateCloseMarket() {
     return { close_market: {} };
@@ -165,10 +175,10 @@ export class TerraMarketsContract {
   fabricateQueryBetHistory(
     address: string,
     bets_to_return: BetsToReturn | undefined,
-    round_before: number | undefined,
+    rounds_before: number | undefined,
     limit: number | undefined
   ) {
-    return { bet_history: { address, bets_to_return, round_before, limit } };
+    return { bet_history: { address, bets_to_return, rounds_before, limit } };
   }
 
   fabricateQueryBetStats(address: string) {
@@ -185,6 +195,14 @@ export class TerraMarketsContract {
 
   fabricateQueryRound(round_id: number) {
     return { round: { round_id } };
+  }
+
+  fabricateQueryRoundHistory(
+    rounds_after: number | undefined,
+    limit: number | undefined,
+    order: OrderBy | undefined,
+  ) {
+    return { round_history: { rounds_after, limit, order } };
   }
 
   executeCloseMarket(accAddress: string): MsgExecuteContract {
@@ -256,12 +274,12 @@ export class TerraMarketsContract {
     lcdClient: LCDClient,
     address: string,
     bets_to_return: BetsToReturn | undefined,
-    round_before: number | undefined,
+    rounds_before: number | undefined,
     limit: number | undefined
   ): Promise<BetHistoryResponse> {
     return await lcdClient.wasm.contractQuery(
       this.contractAddress,
-      this.fabricateQueryBetHistory(address, bets_to_return, round_before, limit)
+      this.fabricateQueryBetHistory(address, bets_to_return, rounds_before, limit)
     );
   }
 
@@ -280,4 +298,17 @@ export class TerraMarketsContract {
   async queryRound(lcdClient: LCDClient, round_id: number): Promise<RoundResponse> {
     return await lcdClient.wasm.contractQuery(this.contractAddress, this.fabricateQueryRound(round_id));
   }
+
+  async queryRoundHistory(
+    lcdClient: LCDClient,
+    rounds_after: number | undefined,
+    limit: number | undefined,
+    order: OrderBy | undefined,
+  ): Promise<BetHistoryResponse> {
+    return await lcdClient.wasm.contractQuery(
+      this.contractAddress,
+      this.fabricateQueryRoundHistory(rounds_after, limit, order)
+    );
+  }
 }
+
