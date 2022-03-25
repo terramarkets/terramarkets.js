@@ -27,8 +27,8 @@ export enum BetsToReturn {
 }
 
 export enum OrderBy {
-  Asc = "asc",
-  Desc = "desc",
+  Asc = 'asc',
+  Desc = 'desc'
 }
 
 export interface BetCounters {
@@ -114,8 +114,7 @@ export interface RoundHistoryResponse {
 }
 
 export class TerraMarketsContract {
-  constructor(public contractAddress: AccAddress) {
-  }
+  constructor(public contractAddress: AccAddress) {}
 
   fabricateCloseMarket() {
     return { close_market: {} };
@@ -197,11 +196,7 @@ export class TerraMarketsContract {
     return { round: { round_id } };
   }
 
-  fabricateQueryRoundHistory(
-    rounds_after: number | undefined,
-    limit: number | undefined,
-    order: OrderBy | undefined,
-  ) {
+  fabricateQueryRoundHistory(rounds_after: number | undefined, limit: number | undefined, order: OrderBy | undefined) {
     return { round_history: { rounds_after, limit, order } };
   }
 
@@ -303,7 +298,7 @@ export class TerraMarketsContract {
     lcdClient: LCDClient,
     rounds_after: number | undefined,
     limit: number | undefined,
-    order: OrderBy | undefined,
+    order: OrderBy | undefined
   ): Promise<BetHistoryResponse> {
     return await lcdClient.wasm.contractQuery(
       this.contractAddress,
@@ -311,4 +306,3 @@ export class TerraMarketsContract {
     );
   }
 }
-
