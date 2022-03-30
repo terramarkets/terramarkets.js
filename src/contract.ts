@@ -299,7 +299,7 @@ export class TerraMarketsContract {
     rounds_after: number | undefined,
     limit: number | undefined,
     order: OrderBy | undefined
-  ): Promise<BetHistoryResponse> {
+  ): Promise<RoundHistoryResponse> {
     return await lcdClient.wasm.contractQuery(
       this.contractAddress,
       this.fabricateQueryRoundHistory(rounds_after, limit, order)
