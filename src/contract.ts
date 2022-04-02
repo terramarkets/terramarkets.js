@@ -23,6 +23,7 @@ export enum RoundStatus {
 export enum BetsToReturn {
   All = 'all',
   ToClaim = 'to_claim',
+  ToClaimIncludingLoss = 'to_claim_including_loss',
   Claimed = 'claimed'
 }
 
@@ -71,12 +72,14 @@ export interface BetStatsResponse {
 
 export interface ConfigResponse {
   asset: string;
+  decimals: number,
   denom: string;
   description: string;
   interval: number;
   min_bet: string;
   tax: string;
   owner: string;
+  quoted_asset: string;
   symbol: string;
   treasury: string;
 }
