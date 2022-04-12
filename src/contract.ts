@@ -72,7 +72,7 @@ export interface BetStatsResponse {
 
 export interface ConfigResponse {
   asset: string;
-  decimals: number,
+  decimals: number;
   denom: string;
   description: string;
   interval: number;
