@@ -6,9 +6,9 @@ import { HubConnection } from '@microsoft/signalr/dist/esm/HubConnection';
 export interface MarketUpdate {
   symbol: string;
   last_price: string | undefined;
-  open_round: RoundResponse;
-  locked_round: RoundResponse;
-  closed_round: RoundResponse;
+  open_round: RoundResponse | undefined;
+  locked_round: RoundResponse | undefined;
+  closed_round: RoundResponse | undefined;
   status: MarketStatus;
   update_date: Date;
 }
