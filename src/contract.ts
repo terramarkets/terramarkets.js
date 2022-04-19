@@ -71,9 +71,10 @@ export interface BetStatsResponse {
 }
 
 export interface ConfigResponse {
-  asset: string;
-  decimals: number;
-  denom: string;
+  base_asset: string;
+  bet_asset: string;
+  bet_asset_decimals: number;
+  bet_asset_name: string;
   description: string;
   interval: number;
   min_bet: string;
