@@ -20,7 +20,7 @@ export interface SymbolInfo {
   roundingDigits: number;
 }
 
-export type NetworkType = 'mainnet' | 'testnet' | 'localterra';
+export type NetworkType = 'mainnet' | 'testnet' | 'localterra' | 'testnet-dev';
 
 export class TerraMarketsApi {
   public readonly hubConnection: HubConnection;
